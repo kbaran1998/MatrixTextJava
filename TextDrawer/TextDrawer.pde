@@ -1,27 +1,34 @@
-//private PFont f;
+import java.util.ArrayList;
+import java.util.List;
+
+
+private JapaneseAlphabetGenerator japGen;
+List <String> alphabet;
+
+
+float y; // Horizontal location
+int index = 0;
 
 void setup() {
-  size(400, 400);
-  //f = createFont("Arial", 40, true);
-  background(0);
-  fill(0,255,0);
-  String ch = new String(Character.toChars(unhex("30A1")));
-  //textSize(20); /// DO NOT CHANGE size. It does not represent the uncode char anymore
-  text(ch, width/2, height/2);
-  text(ch, width/2, height/2+10); // Space in between characters is 10
-  text(ch, width/2+10, height/2);
+  size(500, 500);
+  japGen = new JapaneseAlphabetGenerator();
+  alphabet = new ArrayList<String>();
+  for (int i = 0; i < japGen.alphabet.size(); i++) {
+    alphabet.add(new String(Character.toChars(unhex(japGen.alphabet.get(i)))));
+  }
+  
+  y = 0;
 }
 
 void draw() {
+  background(0);
+  fill(0,255,0);
   
-  //textFont(f,16);
-}
+  text(alphabet.get(4), width/2, y); 
 
-///fill(0);
-  //String sh = "30A1";
-  //int n = unhex(sh);
+  y = y + 1;
   
-  //char[] chars = Character.toChars(n);
-  //String ch = new String(chars);
-  //println(ch);
-  //text(ch, 50, 50);
+  if (y > height) {
+    y = 0;
+  }
+}
