@@ -34,4 +34,11 @@ public class Raindroplet {
     }
   }
   
+  public boolean isRainDropletDrawn() {
+    if (this.yCoordinates.length == 0) {
+      return false;
+    }
+    return this.yCoordinates[this.yCoordinates.length-1] > 0 ? true : false; 
+  }
+  
 }

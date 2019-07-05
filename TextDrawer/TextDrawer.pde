@@ -4,10 +4,16 @@ import java.util.Random;
 
 private JapaneseAlphabetGenerator japGen;
 private List <String> alphabet;
-private Raindroplet [] rainArray;
-private boolean [] drawnDroplet;
+
+
+private List<Raindroplet> [] rainList;
+private List<Boolean> [] drawnDroplets;
+
+
 private int elements;
 Random rand;
+
+
 
 void setup() {
   size(1000, 1000);
@@ -17,31 +23,55 @@ void setup() {
   for (int i = 0; i < japGen.alphabet.size(); i++) {
     alphabet.add(new String(Character.toChars(unhex(japGen.alphabet.get(i)))));
   }
-  rainArray = new Raindroplet [elements];
-  drawnDroplet = new boolean[elements];
-  for (int i = 0; i < rainArray.length; i++) {
-    rainArray[i] = new Raindroplet(100, japGen);
-    drawnDroplet[i] = false;
+  rainList = new ArrayList[elements];
+  drawnDroplets = new ArrayList[elements];
+  for (int i = 0; i < elements; i++) {
+    List<Raindroplet> list = new ArrayList<Raindroplet>();
+    list.add(new Raindroplet(50, japGen));
+    rainList[i] = list;
+    
+    List<Boolean> listBool = new ArrayList<Boolean>();
+    listBool.add(false);
+    drawnDroplets[i] = listBool;
   }
   rand = new Random();
 }
 
+
+
 void draw() {
   background(0);
   fill(0,255,0);
-  
   for (int j = 0; j < elements; j++) {
-    if (drawnDroplet[j] || rand.nextInt(1000) == 1) {
-      drawnDroplet[j] = true;
-      for (int i = 0; i < rainArray[j].charsList.size(); i++) {
-         text(rainArray[j].charsList.get(i), j*10, rainArray[j].yCoordinates[i]);
-         rainArray[j].yCoordinates[i] += 2;
-         rainArray[j].changeRandomLetter();
-         if (rainArray[j].yCoordinates[rainArray[j].yCoordinates.length-1] > height) {
-           drawnDroplet[j] = false;
-           rainArray[j] = new Raindroplet(40, japGen);
-         }
+    for (int k = 0; k < drawnDroplets[j].size(); k++) {
+      if (isPreviousDropletDrawnFully(k-1, rainList[j])) {
+        if (drawnDroplets[j].get(k) || rand.nextInt(500) == 1) {
+          drawnDroplets[j].set(k, true); //<>//
+          for (int i = 0; i < rainList[j].get(k).charsList.size(); i++) {
+             text(rainList[j].get(k).charsList.get(i), j*10, rainList[j].get(k).yCoordinates[i]);
+             rainList[j].get(k).yCoordinates[i] += 2.5;
+             rainList[j].get(k).changeRandomLetter();
+          }
+        
+          //if one droplet is completely drawn on the screen, add another one
+          if (rainList[j].get(k).isRainDropletDrawn()) {
+             rainList[j].add(new Raindroplet(50, japGen));
+             drawnDroplets[j].add(false);
+          }
+          
+          if (rainList[j].get(k).yCoordinates.length != 0 && rainList[j].get(k).yCoordinates[rainList[j].get(k).yCoordinates.length-1] > height) {
+             drawnDroplets[j].remove(k);
+             rainList[j].remove(k);
+          }
+        }
       }
     }
   }
+}
+
+public boolean isPreviousDropletDrawnFully(int previous, List<Raindroplet> list) {
+  if (previous < 0) {
+    return true;
+  }
+  return list.get(previous).isRainDropletDrawn();
 }
