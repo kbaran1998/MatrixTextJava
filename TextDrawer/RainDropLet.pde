@@ -4,33 +4,36 @@ import java.util.Random;
 
 
 public class Raindroplet {
-  int dropletLength;
-  List<String> charsList;
-  float [] yCoordinates;
-  JapaneseAlphabetGenerator japGen;
-  Random rand;
+  
+  private int dropletLength;
+  private List<String> japaneseCharList;
+  private float [] yCoordinates;
+  private JapaneseAlphabetGenerator japGen;
+  private Random rand;
   
   /**
   * A constuctor to the rain droplet.
   */
-  public Raindroplet(int dropletLengthIn, JapaneseAlphabetGenerator japGen) {
-    rand = new Random();
+  public Raindroplet(int dropletLengthMax, JapaneseAlphabetGenerator japGen, Random rand) {
+    this.rand = rand;
     this.japGen = japGen;
-    this.dropletLength = rand.nextInt(dropletLengthIn+1);
-    charsList = new ArrayList<String>();
-    
+    int random = raindropletLength(dropletLengthMax);
+    this.dropletLength = random == 0 ? 1 : random;
+    japaneseCharList = new ArrayList<String>();
+    yCoordinates = new float [this.dropletLength];
     for (int i = 0; i < this.dropletLength; i++) {
-      charsList.add(new String(Character.toChars(unhex(japGen.getRandomCharacter()))));
-    }
-    yCoordinates = new float [charsList.size()];
-    for (int i = 0; i < this.dropletLength; i++) {
+      japaneseCharList.add(japGen.getRandomCharacter());
       yCoordinates[i] = (-10)*i;
     }
   }
   
-  public void changeRandomLetter() {
-    if (rand.nextInt(50) == 1) {
-      charsList.set(rand.nextInt(charsList.size()), new String(Character.toChars(unhex(japGen.getRandomCharacter()))));
+  public List<String> getDropletLetters() {
+    return japaneseCharList;
+  }
+  
+  public void changeRandomLetter(int probability) {
+    if (rand.nextInt(probability) == rand.nextInt(probability)) {
+      japaneseCharList.set(rand.nextInt(japaneseCharList.size()), japGen.getRandomCharacter());
     }
   }
   
@@ -39,6 +42,17 @@ public class Raindroplet {
       return false;
     }
     return this.yCoordinates[this.yCoordinates.length-1] > 0 ? true : false; 
+  }
+  
+  /**
+  * Random length for a droplet with a maximum length (inclusive).
+  */
+  public int raindropletLength(int maxLength) {
+    return this.rand.nextInt(maxLength+1);
+  }
+  
+  public float [] getYCoordinatesList() {
+    return yCoordinates;
   }
   
 }

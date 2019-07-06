@@ -2,39 +2,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+private final int MAX_CHAR_SPACING = 10;
+private final int MAX_RAINDROPLET_LENGTH = 50;
+private final int TO_RAIN_PROBABILITY = 250;
+private final int CHAR_CHANGE_PROBABILITY = 100;
+
+
 private JapaneseAlphabetGenerator japGen;
-private List <String> alphabet;
-
-
 private List<Raindroplet> [] rainList;
 private List<Boolean> [] drawnDroplets;
-
-
-private int elements;
-Random rand;
+private int columnsNum;
+private Random rand;
 
 
 
 void setup() {
   size(1000, 1000);
-  elements = width/10;
-  japGen = new JapaneseAlphabetGenerator();
-  alphabet = new ArrayList<String>();
-  for (int i = 0; i < japGen.alphabet.size(); i++) {
-    alphabet.add(new String(Character.toChars(unhex(japGen.alphabet.get(i)))));
-  }
-  rainList = new ArrayList[elements];
-  drawnDroplets = new ArrayList[elements];
-  for (int i = 0; i < elements; i++) {
-    List<Raindroplet> list = new ArrayList<Raindroplet>();
-    list.add(new Raindroplet(50, japGen));
-    rainList[i] = list;
-    
-    List<Boolean> listBool = new ArrayList<Boolean>();
-    listBool.add(false);
-    drawnDroplets[i] = listBool;
-  }
+  columnsNum = width/MAX_CHAR_SPACING;
   rand = new Random();
+  japGen = new JapaneseAlphabetGenerator(rand);
+  rainList = new ArrayList[columnsNum];
+  drawnDroplets = new ArrayList[columnsNum];
+  for (int i = 0; i < columnsNum; i++) {
+    rainList[i] = new ArrayList<Raindroplet>();
+    rainList[i].add(new Raindroplet(MAX_RAINDROPLET_LENGTH, japGen, rand));
+    drawnDroplets[i] = new ArrayList<Boolean>();
+    drawnDroplets[i].add(false);
+  }
 }
 
 
@@ -42,26 +36,26 @@ void setup() {
 void draw() {
   background(0);
   fill(0,255,0);
-  for (int j = 0; j < elements; j++) {
-    for (int k = 0; k < drawnDroplets[j].size(); k++) {
-      if (isPreviousDropletDrawnFully(k-1, rainList[j])) {
-        if (drawnDroplets[j].get(k) || rand.nextInt(500) == 1) {
-          drawnDroplets[j].set(k, true); //<>//
-          for (int i = 0; i < rainList[j].get(k).charsList.size(); i++) {
-             text(rainList[j].get(k).charsList.get(i), j*10, rainList[j].get(k).yCoordinates[i]);
-             rainList[j].get(k).yCoordinates[i] += 2.5;
-             rainList[j].get(k).changeRandomLetter();
-          }
-        
-          //if one droplet is completely drawn on the screen, add another one
-          if (rainList[j].get(k).isRainDropletDrawn()) {
-             rainList[j].add(new Raindroplet(50, japGen));
-             drawnDroplets[j].add(false);
+  for (int columnIndex = 0; columnIndex < columnsNum; columnIndex++) {
+    for (int dropletIndex = 0; dropletIndex < drawnDroplets[columnIndex].size(); dropletIndex++) {
+      if (isPreviousDropletDrawnFully(dropletIndex-1, rainList[columnIndex])) {
+        if (drawnDroplets[columnIndex].get(dropletIndex) || japGen.toRain(TO_RAIN_PROBABILITY)) {
+          drawnDroplets[columnIndex].set(dropletIndex, true);  //<>//
+          
+          for (int i = 0; i < rainList[columnIndex].get(dropletIndex).getDropletLetters().size(); i++) {
+             text(rainList[columnIndex].get(dropletIndex).getDropletLetters().get(i), columnIndex*MAX_CHAR_SPACING, rainList[columnIndex].get(dropletIndex).getYCoordinatesList()[i]);
+             rainList[columnIndex].get(dropletIndex).getYCoordinatesList()[i] += 3;
+             rainList[columnIndex].get(dropletIndex).changeRandomLetter(CHAR_CHANGE_PROBABILITY);
           }
           
-          if (rainList[j].get(k).yCoordinates.length != 0 && rainList[j].get(k).yCoordinates[rainList[j].get(k).yCoordinates.length-1] > height) {
-             drawnDroplets[j].remove(k);
-             rainList[j].remove(k);
+          if (isDropletCompletlyDrawnOnScreen(columnIndex, dropletIndex)) {
+             rainList[columnIndex].add(new Raindroplet(MAX_RAINDROPLET_LENGTH, japGen, rand));
+             drawnDroplets[columnIndex].add(false);
+          }
+          
+          if (isDropletOutOfSight(columnIndex, dropletIndex)) {
+             drawnDroplets[columnIndex].remove(dropletIndex);
+             rainList[columnIndex].remove(dropletIndex);
           }
         }
       }
@@ -69,9 +63,17 @@ void draw() {
   }
 }
 
-public boolean isPreviousDropletDrawnFully(int previous, List<Raindroplet> list) {
-  if (previous < 0) {
+public boolean isPreviousDropletDrawnFully(int previousDropletIndex, List<Raindroplet> dropletList) {
+  if (previousDropletIndex < 0) {
     return true;
   }
-  return list.get(previous).isRainDropletDrawn();
+  return dropletList.get(previousDropletIndex).isRainDropletDrawn();
+}
+
+public boolean isDropletCompletlyDrawnOnScreen(int columnIndex, int dropletIndex) {
+  return rainList[columnIndex].get(dropletIndex).isRainDropletDrawn();
+}
+
+public boolean isDropletOutOfSight(int columnIndex, int dropletIndex) {
+  return rainList[columnIndex].get(dropletIndex).getYCoordinatesList()[rainList[columnIndex].get(dropletIndex).getYCoordinatesList().length-1] > height;
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class JapaneseAlphabetGenerator {
   
-  List <String> alphabet;
+  private List <String> alphabet;
   private Random rand;
   
   /**
@@ -13,13 +13,13 @@ public class JapaneseAlphabetGenerator {
   * and places them into an alphabet list. Also, Java's random
   * number generator is created.
   */
-  public JapaneseAlphabetGenerator() {
+  public JapaneseAlphabetGenerator(Random rand) {
     alphabet = new ArrayList<String>();
     int initVal = Integer.parseInt("30A1", 16);
     for (int i = 0; i < 96; i++) {
-      alphabet.add(Integer.toHexString(initVal + i));
+      alphabet.add(new String(Character.toChars(unhex(Integer.toHexString(initVal + i)))));
     }
-    rand = new Random();
+    this.rand = rand;
   }
   
   /**
@@ -30,16 +30,9 @@ public class JapaneseAlphabetGenerator {
   }
   
   /**
-  * Random length for a droplet with a maximum length (inclusive).
-  */
-  public int raindropletLength(int maxLength) {
-    return rand.nextInt(maxLength+1);
-  }
-  
-  /**
   * Pobabilistic generator for generating droplet if it has not been created.
   */
-  public boolean toRain() {
-    return rand.nextInt(2) == 1 ? true : false; 
+  public boolean toRain(int probability) {
+    return rand.nextInt(probability) == rand.nextInt(probability) ? true : false; 
   }
 }
