@@ -13,6 +13,9 @@ public class Raindroplet {
   
   /**
   * A constuctor to the rain droplet.
+  * @param dropletLengthMax  maximum threshold for a droplet length
+  * @param japGen  japanese character generator
+  * @param rand  random number generator
   */
   public Raindroplet(int dropletLengthMax, JapaneseAlphabetGenerator japGen, Random rand) {
     this.rand = rand;
@@ -27,16 +30,40 @@ public class Raindroplet {
     }
   }
   
+  /**
+  * Getter method for droplet letters.
+  * @return characters list for a droplet.
+  */
   public List<String> getDropletLetters() {
     return japaneseCharList;
   }
   
+  /**
+  * Getter method for droplet letters' y coordinates.
+  * @return array letters' y coordinates.
+  */
+  public float [] getYCoordinatesList() {
+    return yCoordinates;
+  }
+  
+  /**
+  * A method to change a random character in the droplet to any random character.
+  * Two random numbers have to be the same in 1 method call, hence the probability
+  * is a approximately 1 / (probability * probability) (read up Random class
+  * implementation for more details, I was too lazy .... ;) ).
+  * @param probability  probability value
+  */
   public void changeRandomLetter(int probability) {
     if (rand.nextInt(probability) == rand.nextInt(probability)) {
       japaneseCharList.set(rand.nextInt(japaneseCharList.size()), japGen.getRandomCharacter());
     }
   }
   
+  /**
+  * Chekck is a given rain droplet is drawn by checking the last character being
+  * in position higehr than 0.
+  * @return boolean value that decides if a rain droplet is drawn
+  */
   public boolean isRainDropletDrawn() {
     if (this.yCoordinates.length == 0) {
       return false;
@@ -45,14 +72,11 @@ public class Raindroplet {
   }
   
   /**
-  * Random length for a droplet with a maximum length (inclusive).
+  * A method that returns random length for a droplet with a maximum length (inclusive).
+  * @param maxLength  maximum threshold for a raindroplet
+  * @return  random length
   */
   public int raindropletLength(int maxLength) {
     return this.rand.nextInt(maxLength+1);
   }
-  
-  public float [] getYCoordinatesList() {
-    return yCoordinates;
-  }
-  
 }
