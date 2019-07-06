@@ -1,37 +1,22 @@
-## Welcome to GitHub Pages
+# **Matrix Rain in Processing (Java)**
+## Red or Blue pill?
 
-You can use the [editor on GitHub](https://github.com/kbaran1998/MatrixTextJava/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+![A sample of what this bad boy can do](matrix_rain.gif)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Well, no need to ask since you are here to see how deep the rabbit hole goes .... so you pretty much answered your own question. ;) <br>
 
-### Markdown
+This is a Matrix rain text from the movie *(you guessed it)* Matrix which (I think)
+has never been done in Java before!!! <br>
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Do you want to get it?
 
-```markdown
-Syntax highlighted code block
+Great, you can download it [HERE](https://1drv.ms/f/s!AnEExJKHUjgQgZ5o0-Sd77f36HeYlg). Pick one based on your operating system and download that folder!
 
-# Header 1
-## Header 2
-### Header 3
+## Want to contribute/found a bug?
+Write an email to me: *krysbaran@gmail.com*
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kbaran1998/MatrixTextJava/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Sources and inspiration
+- [**CodePen**](https://codepen.io/yaclive/pen/EayLYO) by Clive Cooper
+- [**Freecodecamp**](https://www.freecodecamp.org/news/canmaking-it-rain-code-matrix-style-ec6e1386084e/)
+- [**Guest Tutorial #4: Matrix Digital Rain in p5.js with Emily Xie**](https://www.youtube.com/watch?v=S1TQCi9axzg&t=2052s) by [The Coding Train](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
