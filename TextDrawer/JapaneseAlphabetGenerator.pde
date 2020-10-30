@@ -40,6 +40,6 @@ public class JapaneseAlphabetGenerator {
   * @return decision whether to draw a new droplet (once the other droplets in its row are drawn)
   */
   public boolean toRain(int probability) {
-    return rand.nextInt(probability) == rand.nextInt(probability) ? true : false; 
+    return rand.nextInt(probability) == rand.nextInt(probability); 
   }
 }
